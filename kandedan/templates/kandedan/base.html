@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    {% load staticfiles %}
+    <link rel="shortcut icon" href="/static/img/favicon.png">
+    <link href="{% static 'kandedan/css/base.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'kandedan/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'kandedan/js/jquery.js' %}"></script>
+    <script src="{% static 'kandedan/js/jquery.easing.min.js' %}"></script>
+    <meta charset="UTF-8">
+    <title>看得淡财务管理系统</title>
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand page-scroll" href="{% url 'main' %}">看得淡</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                <li class="hidden">
+                    <a class="page-scroll" href="#page-top"></a>
+                </li>
+                <li>
+                    <a class="page-scroll">Welcome <strong> {{ request.session.screen_name }}</strong></a>
+                </li>
+                <li>
+                    <a class="page-scroll" href="#">Add New Activity</a>
+                </li>
+                <li>
+                    <a class="page-scroll" href="#">Setting</a>
+                </li>
+                <li class="logout">
+                    <a class="page-scroll" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<section id="intro" class="intro-section">
+    {% block body %}
+    {% endblock %}
+</section>
+
+
+{#<script src="/static/js/bootstrap.js"></script>#}
+
+{% block script %}
+{% endblock %}
+</body>
+</html>

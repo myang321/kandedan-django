@@ -1,0 +1,40 @@
+{% extends "kandedan/base2.html" %}
+{% load staticfiles %}
+{% block head %}
+    <link rel=stylesheet type=text/css href="{% static 'kandedan/css/login_style.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="wrapper">
+        <div class="container">
+            <h1>Welcome</h1>
+
+            <form class="form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="text" name="username" required placeholder="Username"
+                       value="">
+                <input type="password" name="password" required placeholder="Password">
+
+                <button type="submit" id="login-button">Login</button>
+                <a href="#">
+                    <button type="button" id="signup-button">SignUp</button>
+                </a>
+            </form>
+        </div>
+
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    {% load staticfiles %}
+    <link rel="shortcut icon" href="/static/img/favicon.png">
+    <meta charset="UTF-8">
+    <link href="{% static 'kandedan/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'kandedan/js/jquery.js' %}"></script>
+    <script src="{% static 'kandedan/js/jquery.easing.min.js' %}"></script>
+    <title>看得淡财务管理系统</title>
+    {% block head %}
+    {% endblock %}base.html
+</head>
+<body>
+
+{% block body %}
+{% endblock %}
+
+
+
+{#<script src="/static/js/jquery.easing.min.js" }></script>#}
+{#<script src="/static/js/bootstrap.js"></script>#}
+
+{% block script %}
+{% endblock %}
+</body>
+</html>

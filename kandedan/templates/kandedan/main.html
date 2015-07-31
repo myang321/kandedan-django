@@ -1,0 +1,45 @@
+{% extends "kandedan/base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+    <!-- Bootstrap Core CSS -->
+
+    <!-- Custom CSS -->
+    <link rel=stylesheet type=text/css href="{% static 'kandedan/css/main_style.css' %}">
+    <link rel="stylesheet" href="{% static 'kandedan/css/scrolling-nav.css' %}">
+    <link rel="stylesheet" href="{% static 'kandedan/css/table.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="wrap">
+        <div class="fleft">
+
+            {% include 'kandedan/transaction_list.html' %}
+
+        </div>
+        <div class="fright">
+            {% if balances != None %}
+                {#                {% for user in balances %}#}
+                {#                    <div id="people">#}
+                {#                        <h2>{{ b.amount }}</h2>#}
+                {#                        {% for j in user.creditors %}#}
+                {#                            <div>欠{{ j.name }} ${{ j.amount }}#}
+                {#                                {% if j.amount > 0 and request.session.get('name')==user.name %}#}
+                {#                                    <a href="#">#}
+                {#                                        <button>pay</button>#}
+                {#                                    </a>#}
+                {#                                {% endif %}#}
+                {#                            </div>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {#                {% endfor %}#}
+            {% else %}
+                <h2>{{ not_in_group_msg }}</h2>
+            {% endif %}
+        </div>
+    </div>
+    <!-- jQuery -->
+{% endblock %}
+{% block script %}
+    <script src="{% static 'kandedan/js/scrolling-nav.js' %}"></script>
+{% endblock %}
