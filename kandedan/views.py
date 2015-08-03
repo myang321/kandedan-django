@@ -12,7 +12,6 @@ USER_TYPE_SUPER = 'super'
 USER_TYPE_NORMAL = 'normal'
 
 
-# Create your views here.
 def login(request):
     if request.session.get(SESSION_NAME):
         return HttpResponseRedirect(reverse('main'))
@@ -35,13 +34,13 @@ def main(request):
     if not request.session.get(SESSION_NAME):
         return HttpResponseRedirect(reverse('login'))
     trans = db.get_all_transaction(request.session.get(SESSION_GROUP_ID), request.session.get(SESSION_NAME))
-    balances = None
+    ub_list = None
     not_in_group_msg = None
     if request.session[SESSION_GROUP_ID] != 0:
-        balances = db.get_creditor_debtor_list(request.session[SESSION_GROUP_ID])
+        ub_list = db.get_creditor_debtor_list(request.session[SESSION_GROUP_ID])
     else:
         not_in_group_msg = "You are not in any group, please create or join a group in Setting page."
-    context = {'trans': trans, 'balances': balances, 'not_in_group_msg': not_in_group_msg,
+    context = {'trans': trans, 'ub_list': ub_list, 'not_in_group_msg': not_in_group_msg,
                'request': request}
     return render(request, 'kandedan/main.html', context)
 
@@ -49,3 +48,16 @@ def main(request):
 def logout(request):
     request.session.clear()
     return HttpResponseRedirect(reverse('login'))
+
+
+def add(request):
+    if not request.session.get(SESSION_NAME):
+        return HttpResponseRedirect(reverse('main'))
+    if request.method == 'POST':
+        pass
+    else:
+        users = db.get_all_normal_user_info(request.session[SESSION_GROUP_ID])
+        context = {'users': users}
+        for u in users:
+            print(u)
+        return render(request, 'kandedan/add.html', context)

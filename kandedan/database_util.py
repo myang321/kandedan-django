@@ -1,6 +1,6 @@
 __author__ = 'Steve'
 import django
-from .models import Users, Groups, Transaction, Trans_detail, Balance
+from .models import Users, Groups, Transaction, Trans_detail, Balance, UserBalance
 
 
 def user_authentication(username, password):
@@ -13,9 +13,26 @@ def get_all_transaction(group_id=None, username=None):
     return trans
 
 
-def get_creditor_debtor_list(con, group_id=None):
-    balances = Balance.objects.all()
-    return None
+def get_all_normal_user_info(group_id=None, username=None):
+    if group_id is None and username is None:
+        users = Users.objects.all()
+    elif group_id is not None:
+        users = Users.objects.filter(group_id=group_id)
+    else:
+        users = Users.objects.filter(username=username)
+    return users
+
+
+def get_creditor_debtor_list(group_id=None):
+    users = get_all_normal_user_info(group_id)
+    ub_list = []
+    for u in users:
+        ub = UserBalance(u.username)
+        balances = Balance.objects.filter(debtor=u.username)
+        for b in balances:
+            ub.add_balance(b)
+        ub_list.append(ub)
+    return ub_list
 
 
 if __name__ == '__main__':

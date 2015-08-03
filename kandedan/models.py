@@ -18,14 +18,21 @@ class Users(models.Model):
                    group_id=group_id)
         return user
 
+    def __str__(self):
+        str1 = "User Object:\nusername:{0} screen_name:{1}\n\n".format(self.username, self.screen_name)
+        return str1
+
 
 class Balance(models.Model):
-    class Meta:
-        unique_together = (('creditor', 'debtor'),)
-
     creditor = models.CharField(max_length=30, primary_key=True)
     debtor = models.CharField(max_length=30)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return "Balance Object\ncreditor:{0} debtor:{1} amount:{2}\n".format(self.creditor, self.debtor, self.amount)
+
+    class Meta:
+        unique_together = (('creditor', 'debtor'),)
 
 
 class Transaction(models.Model):
@@ -49,3 +56,19 @@ class Groups(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     holder = models.ForeignKey(Users)
+
+
+class UserBalance(object):
+    def __init__(self, username):
+        self.username = username
+        self.creditor_list = []
+
+    def add_balance(self, balance):
+        self.creditor_list.append(balance)
+
+    def __str__(self):
+        str1 = "UserBalance Object:\n"
+        str1 += "Username={0}\n".format(self.username)
+        for c in self.creditor_list:
+            str1 += "   debtor:{0}, ${1}\n".format(c.creditor, c.amount)
+        return str1
