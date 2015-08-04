@@ -9,6 +9,7 @@
 {% endblock %}
 {% block body %}
     <form action="{% url 'add' %}" method="post">
+        {% csrf_token %}
 
         <h1>Add New Activity</h1>
 

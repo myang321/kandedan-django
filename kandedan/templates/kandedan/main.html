@@ -18,24 +18,7 @@
 
         </div>
         <div class="fright">
-            {% if ub_list != None %}
-                {% for ub in ub_list %}
-                    <div id="people">
-                        <h2>{{ ub.username }}</h2>
-                        {% for j in ub.creditor_list %}
-                            <div>欠{{ j.creditor }} ${{ j.amount }}
-                                {% if j.amount > 0 and request.session.name == ub.username %}
-                                    <a href="#">
-                                        <button>pay</button>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            {% else %}
-                <h2>{{ not_in_group_msg }}</h2>
-            {% endif %}
+            {% include 'kandedan/balance_list.html' %}
         </div>
     </div>
     <!-- jQuery -->

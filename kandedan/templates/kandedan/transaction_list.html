@@ -16,10 +16,10 @@
         <td>{{ t.user.username }}</td>
         <td>{{ t.date }}</td>
         <td>
-            {#            {% for i in t.message.split('----') %}#}
-            {#                {{ i }}<br>#}
-            {#            {% endfor %}#}
-            {{ t.message }}
+            {% for i in t.split_msg %}
+                {{ i }}<br>
+            {% endfor %}
+            {#            {{ t.message }}#}
         </td>
         <td>${{ t.amount }}</td>
         {% if is_admin %}

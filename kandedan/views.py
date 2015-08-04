@@ -2,14 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from . import database_util as db
-
-SESSION_NAME = 'name'
-SESSION_SCREEN_NAME = 'screen_name'
-SESSION_GROUP_ID = 'group_id'
-SESSION_USER_TYPE = 'user_type'
-
-USER_TYPE_SUPER = 'super'
-USER_TYPE_NORMAL = 'normal'
+from .const import *
 
 
 def login(request):
@@ -54,10 +47,19 @@ def add(request):
     if not request.session.get(SESSION_NAME):
         return HttpResponseRedirect(reverse('main'))
     if request.method == 'POST':
-        pass
+        amount = float(request.POST['amount'])
+        date = request.POST['date']
+        msg = request.POST['msg']
+        who = request.POST.getlist('who')
+        who_tuple_list = []
+        for u in who:
+            cnt = int(request.POST['cnt' + u])
+            tuple1 = (u, cnt)
+            who_tuple_list.append(tuple1)
+        db.save_transaction(username=request.session[SESSION_NAME], amount=amount, date=date, message=msg,
+                            who=who_tuple_list, trans_type=TRANS_TYPE_BUY)
+        return HttpResponseRedirect(reverse('main'))
     else:
         users = db.get_all_normal_user_info(request.session[SESSION_GROUP_ID])
         context = {'users': users}
-        for u in users:
-            print(u)
         return render(request, 'kandedan/add.html', context)

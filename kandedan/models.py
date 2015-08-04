@@ -1,4 +1,5 @@
 from django.db import models
+from .const import *
 
 
 # Create your models here.
@@ -42,6 +43,58 @@ class Transaction(models.Model):
     message = models.CharField(max_length=1000, default='')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.CharField(max_length=30, default='')
+    who = []
+
+    # def __init__(self, *args, **kwargs):
+    #     # call super before assign anything
+    #     super(Transaction, self).__init__(*args, **kwargs)
+    #     user = kwargs.pop('user', None)
+    #     trans_type = kwargs.pop('trans_type', None)
+    #     message = kwargs.pop('message', None)
+    #     amount = kwargs.pop('amount', None)
+    #     date = kwargs.pop('date', None)
+    #     who = kwargs.pop('who', None)
+    #     if user is not None:
+    #         who_list2, message2 = Transaction._process_who_list(who, message, amount)
+    #         self.user = user
+    #         self.trans_type = trans_type
+    #         self.message = message2
+    #         self.amount = amount
+    #         self.date = date
+    #         self.who = who_list2
+
+    @staticmethod
+    def _process_who_list(who_list, message, amount):
+        sum1 = 0
+        cnt = 0
+        str1 = LINE_SEPARATOR + " shared with "
+        who_list2 = []
+        for u in who_list:
+            sum1 += u[1]
+            if cnt > 0:
+                str1 += ','
+            str1 += u[0]
+            if u[1] > 1:
+                str1 += '*' + str(u[1])
+            cnt += 1
+        message += str1
+        amount_per_unit = amount / sum1
+        for u in who_list:
+            tuple1 = (u[0], amount_per_unit * u[1])
+            who_list2.append(tuple1)
+        return who_list2, message
+
+    # for type: buy
+    @classmethod
+    def create(cls, user, trans_type, message, amount, date, who):
+        who_list2, message2 = Transaction._process_who_list(who, message, amount)
+        # do not pass transient field into constructor
+        trans = Transaction(user=user, trans_type=trans_type, message=message2, amount=amount, date=date)
+        trans.who = who_list2
+        return trans
+
+    def split_msg(self):
+        return self.message.split(LINE_SEPARATOR)
 
 
 class Trans_detail(models.Model):
@@ -50,6 +103,11 @@ class Trans_detail(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     percent = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     trans = models.ForeignKey(Transaction)
+
+    @classmethod
+    def create(cls, debtor, amount, trans):
+        trans_detail = Trans_detail(debtor=debtor, amount=amount, trans=trans)
+        return trans_detail
 
 
 class Groups(models.Model):
