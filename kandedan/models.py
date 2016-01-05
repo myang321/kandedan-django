@@ -38,6 +38,7 @@ class Balance(models.Model):
 
 class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
+    group = models.ForeignKey('kandedan.Groups')
     user = models.ForeignKey(Users)
     trans_type = models.CharField(max_length=30)
     message = models.CharField(max_length=1000, default='')
@@ -86,10 +87,10 @@ class Transaction(models.Model):
 
     # for type: buy
     @classmethod
-    def create(cls, user, trans_type, message, amount, date, who):
+    def create(cls, user, trans_type, message, amount, date, who, group):
         who_list2, message2 = Transaction._process_who_list(who, message, amount)
         # do not pass transient field into constructor
-        trans = Transaction(user=user, trans_type=trans_type, message=message2, amount=amount, date=date)
+        trans = Transaction(user=user, trans_type=trans_type, message=message2, amount=amount, date=date, group=group)
         trans.who = who_list2
         return trans
 

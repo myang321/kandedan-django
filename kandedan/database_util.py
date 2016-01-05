@@ -10,8 +10,8 @@ def user_authentication(username, password):
     return user
 
 
-def get_all_transaction(group_id=None, username=None):
-    trans = Transaction.objects.all().order_by('-id')
+def get_all_transaction(group_id=None):
+    trans = Transaction.objects.filter(group=get_group(group_id)).order_by('-id')
     return trans
 
 
@@ -96,9 +96,15 @@ def get_user(username):
     return user
 
 
-def save_transaction(username, amount, date, message, who, trans_type):
+def get_group(group_id):
+    group = Groups.objects.get(id=group_id)
+    return group
+
+
+def save_transaction(username, amount, date, message, who, trans_type, group_id):
     user = get_user(username)
-    trans = Transaction.create(user=user, trans_type=trans_type, message=message, amount=amount, date=date, who=who)
+    trans = Transaction.create(user=user, trans_type=trans_type, message=message, amount=amount, date=date, who=who,
+                               group=get_group(group_id))
     trans.save()
     if trans.trans_type == TRANS_TYPE_BUY:
         for u in trans.who:

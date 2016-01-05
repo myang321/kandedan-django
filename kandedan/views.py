@@ -26,7 +26,7 @@ def login(request):
 def main(request):
     if not request.session.get(SESSION_NAME):
         return HttpResponseRedirect(reverse('login'))
-    trans = db.get_all_transaction(request.session.get(SESSION_GROUP_ID), request.session.get(SESSION_NAME))
+    trans = db.get_all_transaction(request.session.get(SESSION_GROUP_ID))
     ub_list = None
     not_in_group_msg = None
     if request.session[SESSION_GROUP_ID] != 0:
@@ -57,7 +57,7 @@ def add(request):
             tuple1 = (u, cnt)
             who_tuple_list.append(tuple1)
         db.save_transaction(username=request.session[SESSION_NAME], amount=amount, date=date, message=msg,
-                            who=who_tuple_list, trans_type=TRANS_TYPE_BUY)
+                            who=who_tuple_list, trans_type=TRANS_TYPE_BUY, group_id=request.session[SESSION_GROUP_ID])
         return HttpResponseRedirect(reverse('main'))
     else:
         users = db.get_all_normal_user_info(request.session[SESSION_GROUP_ID])
